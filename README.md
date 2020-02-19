@@ -289,6 +289,11 @@ Now we are ready to trigger the pipeline. If all of the above went well, a new v
 ---
 
 
+# Credits
+
+This scenario would not have been so extensive and described so well without [Zander's](https://github.com/zanderhavgaard) and [Christoffer's](https://github.com/ChristofferNissen) efforts!
+
+---
 
 
 For some more details on the docker images see the file `readme_dockerized.md`
