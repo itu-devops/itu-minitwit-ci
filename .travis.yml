@@ -12,17 +12,23 @@ install:
   - docker --version  # document the version travis is using
 
 stages:
+  - docker_login
   - docker_build
   - test
   - deploy
 
 jobs:
   include:
+    - stage: docker_login
+      name: "login to docker hub"
+      script: |
+        # LOGIN
+        echo $DOCKER_PASSWORD | docker login -u "$DOCKER_USERNAME" --password-stdin
     - stage: docker_build
       name: "build and push docker"
       script: |
         # LOGIN
-        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        echo $DOCKER_PASSWORD | docker login -u "$DOCKER_USERNAME" --password-stdin
         # BUILD
         docker build -t "$DOCKER_USERNAME"/minitwitimage:latest . -f Dockerfile-minitwit
         docker build -t "$DOCKER_USERNAME"/mysqlimage:latest . -f Dockerfile-mysql
