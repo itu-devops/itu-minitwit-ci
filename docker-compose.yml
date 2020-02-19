@@ -16,7 +16,7 @@ services:
         - '5000:5000'
 
   itusqlimage:
-    image: ${DOCKER_USERNAME}/itusqlimage
+    image: ${DOCKER_USERNAME}/mysqlimage
     container_name: minitwit_mysql
     networks:
       - main
