@@ -9,7 +9,7 @@
     :license: BSD, see LICENSE for more details.
 """
 import os
-import minitwit
+import minitwit_mysql
 import unittest
 import tempfile
 
