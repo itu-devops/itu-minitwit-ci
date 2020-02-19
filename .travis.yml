@@ -23,28 +23,32 @@ jobs:
       name: "login to docker hub"
       script: |
         # LOGIN
-        echo $DOCKER_PASSWORD | docker login -u "$DOCKER_USERNAME" --password-stdin
+        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+
+
+
+
     - stage: docker_build
       name: "build and push docker"
       script: |
         # LOGIN
-        echo $DOCKER_PASSWORD | docker login -u "$DOCKER_USERNAME" --password-stdin
+        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
         # BUILD
-        docker build -t "$DOCKER_USERNAME"/minitwitimage:latest . -f Dockerfile-minitwit
-        docker build -t "$DOCKER_USERNAME"/mysqlimage:latest . -f Dockerfile-mysql
-        docker build -t "$DOCKER_USERNAME"/flagtoolimage:latest . -f Dockerfile-flagtool
+        docker build -t $DOCKER_USERNAME/minitwitimage:latest . -f Dockerfile-minitwit
+        docker build -t $DOCKER_USERNAME/mysqlimage:latest . -f Dockerfile-mysql
+        docker build -t $DOCKER_USERNAME/flagtoolimage:latest . -f Dockerfile-flagtool
         # PUSH
-        docker push "$DOCKER_USERNAME"/minitwitimage:latest
-        docker push "$DOCKER_USERNAME"/mysqlimage:latest
-        docker push "$DOCKER_USERNAME"/flagtoolimage:latest
+        docker push $DOCKER_USERNAME/minitwitimage:latest
+        docker push $DOCKER_USERNAME/mysqlimage:latest
+        docker push $DOCKER_USERNAME/flagtoolimage:latest
 
     - stage: test
       name: "run pytest"
       install: skip
       script: |
-        docker build -t "$DOCKER_USERNAME"/minitwittestimage -f Dockerfile-minitwit-tests .
+        docker build -t $DOCKER_USERNAME/minitwittestimage -f Dockerfile-minitwit-tests .
         yes | docker-compose up -d
-        docker run -it --rm --network=itu-minitwit-network "$DOCKER_USERNAME"/minitwittestimage
+        docker run -it --rm --network=itu-minitwit-network $DOCKER_USERNAME/minitwittestimage
 
     - stage: deploy
       name: "deploy new version"
