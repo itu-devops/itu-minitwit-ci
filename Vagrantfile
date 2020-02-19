@@ -6,13 +6,12 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
   config.ssh.private_key_path = 'ssh_keys/do_ssh_key'
 
-  # config.vm.synced_folder "vagrant_files", "/vagrant", type: "rsync"
-  config.vm.provision "file", source: "./docker-compose.yml", destination: "docker-compose.yml"
-
+  config.vm.synced_folder "remote_files", "/vagrant", type: "rsync"
+  
   config.vm.define "minitwit", primary: true do |server|
 
     server.vm.provider :digital_ocean do |provider|
-      provider.ssh_key_name = ENV["SSH_KEY_NAME"]
+      provider.ssh_key_name = "do_ssh_key"
       provider.token = ENV["DIGITAL_OCEAN_TOKEN"]
       provider.image = 'docker-18-04'
       provider.region = 'fra1'
@@ -30,9 +29,16 @@ Vagrant.configure("2") do |config|
     echo -e "\nOpening port for minitwit ...\n"
     ufw allow 5000
 
+    echo -e "\nOpening port for minitwit ...\n"
+    echo ". $HOME/.bashrc" >> $HOME/.bash_profile
+    echo "export DOCKER_USERNAME='<your_dockerhub_id>'" >> $HOME/.bash_profile
+    echo "export DOCKER_PASSWORD='<your_dockerhub_pwd>'" >> $HOME/.bash_profile
+    source $HOME/.bash_profile
+
     echo -e "\nStart minitwit with docker-compose ...\n"
-    cd /vagrant
-    docker-compose up -d
+    cd /vagrant/
+    # echo $DOCKER_PASSWORD | docker login -u "$DOCKER_USERNAME" --password-stdin
+    # yes | docker-compose up -d
 
     echo -e "\nVagrant setup done ..."
     echo -e "minitwit should be accessible at http://$(hostname -I | awk '{print $1}'):5000"
