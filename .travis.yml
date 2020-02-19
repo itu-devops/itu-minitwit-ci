@@ -18,16 +18,6 @@ stages:
 
 jobs:
   include:
-    - stage: test
-      name: "run pytest"
-      install: skip
-      script: |
-        pip install -r requirements.txt
-        bash control.sh init
-        # start the minitwit api as daemon and suppress terminal output, then run test
-        nohup python minitwit.py > /dev/null 2>&1 &
-        pytest minitwit_tests.py
-
     - stage: docker_build
       name: "build and push docker"
       script: |
@@ -41,6 +31,14 @@ jobs:
         docker push "$DOCKER_USERNAME"/minitwitimage:latest
         docker push "$DOCKER_USERNAME"/mysqlimage:latest
         docker push "$DOCKER_USERNAME"/flagtoolimage:latest
+
+    - stage: test
+      name: "run pytest"
+      install: skip
+      script: |
+        docker build -t "$DOCKER_USERNAME"/minitwittestimage -f Dockerfile-minitwit-tests .
+        docker-compose up -d
+        docker run -it --rm --network=itu-minitwit-network "$DOCKER_USERNAME"/minitwittestimage
 
     - stage: deploy
       name: "deploy new version"
