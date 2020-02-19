@@ -44,7 +44,10 @@ jobs:
       name: "deploy new version"
       install: skip
       # -o flag to get around "add ip to known hosts prompt"
-      script:
-        - source /root/.bash_profile
-        - echo $DOCKER_USERNAME
-        - ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} "cd /vagrant && docker-compose pull && docker-compose up -d"
+      script: |
+        ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \
+        "source /root/.bash_profile && \
+        echo $DOCKER_USERNAME && \
+        cd /vagrant && \
+        docker-compose pull && \
+        docker-compose up -d"
