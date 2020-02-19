@@ -4,6 +4,7 @@ echo "Building Minitwit Images"
 docker build -t $DOCKER_USERNAME/minitwitimage -f Dockerfile-minitwit .
 docker build -t $DOCKER_USERNAME/flagtoolimage -f Dockerfile-flagtool .
 docker build -t $DOCKER_USERNAME/mysqlimage -f Dockerfile-mysql .
+docker build -t $DOCKER_USERNAME/minitwittestimage -f Dockerfile-minitwit-tests .
 
 echo "Login to Dockerhub, provide your password below..."
 read -s DOCKER_PASSWORD
