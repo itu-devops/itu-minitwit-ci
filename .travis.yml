@@ -37,7 +37,7 @@ jobs:
       install: skip
       script: |
         docker build -t "$DOCKER_USERNAME"/minitwittestimage -f Dockerfile-minitwit-tests .
-        docker-compose up -d
+        yes | docker-compose up -d
         docker run -it --rm --network=itu-minitwit-network "$DOCKER_USERNAME"/minitwittestimage
 
     - stage: deploy
