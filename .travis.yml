@@ -1,0 +1,50 @@
+os: linux
+dist: bionic
+
+language: python
+python:
+  - 3.7
+
+services:
+  - docker  # required, but travis uses older version of docker :(
+
+install:
+  - docker --version  # document the version travis is using
+
+stages:
+  - test
+  - docker_build
+  - deploy
+
+jobs:
+  include:
+    - stage: test
+      name: "run pytest"
+      install: skip
+      script: |
+        pip install -r requirements.txt
+        bash control.sh init
+        # start the minitwit api as daemon and suppress terminal output, then run test
+        nohup python minitwit.py > /dev/null 2>&1 &
+        pytest minitwit_tests.py
+
+    - stage: docker_build
+      name: "build and push docker"
+      script: |
+        # LOGIN
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        # BUILD
+        docker build -t "$DOCKER_USERNAME"/minitwitimage:latest . -f Dockerfile-minitwit
+        docker build -t "$DOCKER_USERNAME"/mysqlimage:latest . -f Dockerfile-mysql
+        docker build -t "$DOCKER_USERNAME"/flagtoolimage:latest . -f Dockerfile-flagtool
+        # PUSH
+        docker push "$DOCKER_USERNAME"/minitwitimage:latest
+        docker push "$DOCKER_USERNAME"/mysqlimage:latest
+        docker push "$DOCKER_USERNAME"/flagtoolimage:latest
+
+    - stage: deploy
+      name: "deploy new version"
+      install: skip
+      # -o flag to get around "add ip to known hosts prompt"
+      script: |
+        ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} "cd /vagrant && docker-compose pull && docker-compose up -d"
