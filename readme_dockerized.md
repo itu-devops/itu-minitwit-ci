@@ -1,74 +1,82 @@
-# Minitwit + mysql + docker + docker-compose
+# Minitwit + MySQL + Docker + `docker-compose`
 
-## docker-compose
+## `docker-compose`
 
-to run minitwit and the mysql db containers simply use docker-compose up
-use -d to start as daemon
+To run ITU-MiniTwit and the MySQL DBMS containers simply use `docker-compose up`.
+Use `-d` to start as daemon, and set the user
+
 ```bash
-docker-compose up -d
+DOCKER_USERNAME=<your_dockerhub_username> docker-compose up -d
 ```
 
-tear it down and delete mysql volume with -v
+Tear it down and delete MySQL volume with -v
+
 ```bash
-docker-compose down -v
+DOCKER_USERNAME=<your_dockerhub_username> docker-compose down -v
 ```
 
-## dockerfiles
+## Dockerfiles
 
-we have 3 dockerfiles:
+We have 3 Dockerfiles:
 
 ---
-### minitwit
-`Dockerfile-minitwit` - on docker hub: `devopsitu/minitwitimage`
-contains the minitwit python application adapted to work with mysql
+
+### `Dockerfile-minitwit`
+`Dockerfile-minitwit` - on docker hub: ` <your_dockerhub_username>/minitwitimage`
+contains the ITU-MiniTwit Python application adapted to work with MySQL
+
+Build with:
+
+```bash
+DOCKER_USERNAME=<your_dockerhub_username> docker build -t $DOCKER_USERNAME/minitwitimage -f Dockerfile-minitwit .
+```
+
+Push with:
+
+```bash
+docker push <your_dockerhub_username>/minitwitimage
+```
+
+---
+### `Dockerfile-flagtool`
+
+`Dockerfile-flagtool` - on Docker Hub: ` <your_dockerhub_username>/flagtoolimage`
+contains the `flagtool adapted to work with MySQL
 
 build with
 ```bash
-docker build -t devopsitu/minitwitimage -f Dockerfile-minitwit .
+docker build -t <your_dockerhub_username>/flagtoolimage -f Dockerfile-flagtool .
 ```
 
 push with
 ```bash
-docker push devopsitu/minitwitimage
+docker push <your_dockerhub_username>/flagtoolimage
 ```
 
 ---
-### flagtool
-`Dockerfile-flagtool` - on docker hub: `devopsitu/flagtoolimage`
-contains the flagtool adapted to work with mysql
+### `Dockerfile-mysql`
+
+`Dockerfile-mysql` - on Docker Hub: ` <your_dockerhub_username>/itusqlimage`
+contains a MySQL server that initializes with all of the data from one of simulator scenarios found in `minitwit_init.sql`
 
 build with
 ```bash
-docker build -t devopsitu/flagtoolimage -f Dockerfile-flagtool .
+docker build -t <your_dockerhub_username>/itusqlimage -f Dockerfile-mysql .
 ```
 
 push with
 ```bash
-docker push devopsitu/flagtoolimage
+docker push <your_dockerhub_username>/itusqlimage
 ```
 
----
-### mysql
-`Dockerfile-mysql` - on docker hub: `devopsitu/itusqlimage`
-contains a mysql server that initializes with all of the data from one of simulator scenarios found in `minitwit_init.sql`
-
-build with
+you can run the MySQL server with
 ```bash
-docker build -t devopsitu/itusqlimage -f Dockerfile-mysql .
+docker run --rm -d --name minitwit_mysql -e MYSQL_ROOT_PASSWORD=root <your_dockerhub_username>/itusqlimage
 ```
 
-push with
-```bash
-docker push devopsitu/itusqlimage
-```
+If you need to connect and check that the MySQL db is working you can do something like:
 
-you can run the mysql server with
-```bash
-docker run --rm -d --name minitwit_mysql -e MYSQL_ROOT_PASSWORD=root devopsitu/itusqlimage
-```
-
-If you need to connect and check that the mysql db is working you can do something like:
 ```bash
 docker run --rm -it mysql:5.7 mysql -u root -proot -h 172.17.0.2 -D minitwit
 ```
-And change the ip address to be correct of course..
+And change the IP address to be correct of course..
