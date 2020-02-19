@@ -31,17 +31,14 @@ Vagrant.configure("2") do |config|
 
     echo -e "\nOpening port for minitwit ...\n"
     echo ". $HOME/.bashrc" >> $HOME/.bash_profile
+
+    echo -e "\nConfiguring credentials as environment variables...\n"
     echo "export DOCKER_USERNAME='<your_dockerhub_id>'" >> $HOME/.bash_profile
     echo "export DOCKER_PASSWORD='<your_dockerhub_pwd>'" >> $HOME/.bash_profile
     source $HOME/.bash_profile
 
-    echo -e "\nStart minitwit with docker-compose ...\n"
-    cd /vagrant/
-    # echo $DOCKER_PASSWORD | docker login -u "$DOCKER_USERNAME" --password-stdin
-    # yes | docker-compose up -d
-
     echo -e "\nVagrant setup done ..."
-    echo -e "minitwit should be accessible at http://$(hostname -I | awk '{print $1}'):5000"
+    echo -e "minitwit will later be accessible at http://$(hostname -I | awk '{print $1}'):5000"
     echo -e "The mysql database needs a minute to initialize, if the landing page is stack-trace ..."
     SHELL
   end
