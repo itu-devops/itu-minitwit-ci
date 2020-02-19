@@ -4,16 +4,12 @@ from bs4 import BeautifulSoup
 
 
 FRONTEND_URL = "http://minitwit:5000"
-# FRONTEND_URL = "http://localhost:5000"
-
 
 while True:
     # This is a hack...
     r = requests.get(FRONTEND_URL)
     if "mysql.connector.errors.InterfaceError" in r.text:
         print("Waiting another 5s for DB to be initialized...")
-
-        print(r.text[:100])
         sleep(5)
     else:
         break
