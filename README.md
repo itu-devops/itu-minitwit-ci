@@ -291,7 +291,7 @@ Now we are ready to trigger the pipeline. If all of the above went well, a new v
 
 # Credits
 
-This scenario would not have been so extensive and described so well without [Zander's](https://github.com/zanderhavgaard) and [Christoffer's](https://github.com/ChristofferNissen) efforts!
+This scenario exists only due to the hard work of [Zander's](https://github.com/zanderhavgaard) and [Christoffer's](https://github.com/ChristofferNissen)!
 
 ---
 
