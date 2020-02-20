@@ -49,4 +49,5 @@ jobs:
         "source /root/.bash_profile && \
         cd /vagrant && \
         docker-compose pull && \
-        docker-compose up -d"
+        docker-compose up -d && \
+        docker pull $DOCKER_USERNAME/flagtoolimage:latest"
