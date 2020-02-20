@@ -6,7 +6,6 @@ dist
 *.egg-info
 _mailinglist
 .vscode/
-flag_tool
 *.venv
 __pycache__/
 ssh_keys/do_ssh_key*
