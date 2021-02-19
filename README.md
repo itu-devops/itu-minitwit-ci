@@ -19,12 +19,24 @@
   $ cd itu-minitwit-ci
   ```
 
-  * Add your Docker Hub credentials to the `Vagrantfile`, that is replace `<your_dockerhub_id>` and `<your_dockerhub_pwd>` on lines 34 and 35 with your login ID and password. **OBS** Remember to not push these credentials back to a public repository.
+  * Add your Docker Hub credentials to the `Vagrantfile`, that is replace `<your_dockerhub_id>` and `<your_dockerhub_pwd>` on lines 36 and 37 with your login ID and password. **OBS:** Remember to **not push these credentials back to a public repository**.
+
+  * Install the Travis CLI client, which is provided via a Ruby GEM. Make sure you have at least Ruby 2.3.0 (2.6.0 recommended) installed. You can check your Ruby version by running `ruby -v`.
+    - To install the Travis CLI client on Linux (and MacOS) run `sudo gem install travis --no-document`.
+    - In case you are on a Windows machine run `$ gem install travis`
+    - See the [official documentation](https://github.com/travis-ci/travis.rb#installation)
+  * To allow the Travis CLI tool to log into your Travis CI account later, create a GitHub Personal Access Token, see the [official documentation](https://github.com/settings/tokens):
+    - Give the token a name and select the scopes `repo` and `admin:org`
+
+    ![](images/github_tokens.png)
+    ![](images/gh_token_scopes.png)
+
+
 
 ----
 
 To setup this scenario we have two parts:
-- A remote server to which we will deploy out ITU-MiniTwit application and which is provisioned on DigitalOcean using `vagrant`.
+- A remote server to which we will deploy our ITU-MiniTwit application and which is provisioned on DigitalOcean using `vagrant`.
 - A Travis CI pipeline, which we will use to automate tests, build the application (in Docker images) and deploy them to the server.
 
 
@@ -38,9 +50,9 @@ To setup this scenario we have two parts:
 
 ## 2.) SSH Key Pair
 
-In order to connect to the server we are going to provision, we will use rsa keys for authentication. Thus we can also give the SSH key to the Travis CI pipeline, such that it can automatically deploy new versions on our server.
+To connect to the server we are going to provision, we will use RSA keys for authentication. We will provide the same SSH keys to the Travis CI pipeline, so that it can automatically deploy new versions on our server.
 
-Change directory to `ssh_keys` with `cd ssh_keys`. If the directory is not present you can create it with `mkdir ssh_keys`. The `-m "PEM"` sets the format of the keys we will generate to a format that Travis CI supports. The following command will generate the keys:
+Now, create a keypair as illustrated below. The `-m "PEM"` sets the format of the generated key pair to a format that is supported by Travis CI.
 
 ```bash
 $ cd ssh_keys
@@ -49,12 +61,12 @@ $ ssh-keygen -m "PEM"
 
 <!-- ssh-keygen -t rsa -b 4096 -m "PEM" -->
 
-When prompted for name type `do_ssh_key` and hit enter three times to accept the other defaults. You can call the SSH key files whatever you want, but the `Vagrantfile` expects the SSH keys to have that specific name.
+When prompted for the file to save the key (`Enter file in which to save the key (/home/<your_user>/.ssh/id_rsa)`) type `./ssh_keys/do_ssh_key`. Hit enter three times to accept the other defaults. You can call the SSH key files whatever you want, but the `Vagrantfile` expects the SSH keys to have that specific name. So in case you use another name, adapt the `Vagrantfile` accordingly.
 
 
-## 2.1.) Register you Public SSH at DigitalOcean
+## 2.1.) Register your Public SSH at DigitalOcean
 
-Now, after generating the keys, log into DigitalOcean and navigate to the security configuration, left bottom under `ACCOUNT` -> `Security`.
+Now, after generating the key pair, log into DigitalOcean and navigate to the security configuration, left bottom under `ACCOUNT` -> `Security`.
 
 Under `SSH keys` click the `Add SSH Key` button and register a `New SSH key` with the name `do_ssh_key`. Paste into the input field the contents of `ssh_keys/do_ssh_key.pub`, which you might receive via: `cat ssh_keys/do_ssh_key.pub` on the command line.
 
@@ -62,11 +74,11 @@ Under `SSH keys` click the `Add SSH Key` button and register a `New SSH key` wit
 
 ## 2.2.) Add SSH key to Github repository
 
-Add the generated SSH key to your Github repository, such that Travis CI can clone our repository when we run the pipeline. Navigate to the page of the repository on github.com in your browser and click the `Settings` tab:
+Add the generated SSH key to your Github repository, so that Travis CI can clone the repository when we run the pipeline. Navigate to the page of the repository on github.com in your browser and click the `Settings` tab:
 
 ![](images/add_ssh_key_github.png)
 
-Now click `Deploy keys` and then `Add deploy key`. Set the title to something like "Travis CI pipeline" so that you know who has access through this key. Then paste the contents of the **public** key of the SSH keys we generated earlier. The public key is the one that has the `.pub` extension, in our case the file is `ssh_keys/do_ssh_key.pub`. Paste contents of that file into the Key field.
+Now click `Deploy keys` and then `Add deploy key`. Set the title to something like "Travis CI pipeline" so that you know who has access through this key. Then paste the contents of the **public** key of the SSH keys we generated earlier (`cat ssh_keys/do_ssh_keys.pub`).
 
 ![](images/add_deploy_key.png)
 
@@ -79,30 +91,25 @@ Finish by clicking `Add key`.
 
 ## Vagrant DigitalOcean Plugin
 
-We assume you have `vagrant` installed, now make sure to install the DigitalOcean plugin, that will allow us to provision DigitalOcean machines using vagrant:
+We assume you have `vagrant` and the Vagrant DigitalOcean plugin installed, see [session 3 prep. notes](https://github.com/itu-devops/lecture_notes/blob/master/sessions/session_03/README_PREP.md).
 
-```bash
-$ vagrant plugin install vagrant-digitalocean
-```
 
 ## DigitalOcean Token
 
-In order create virtual machines at DigitalOcean via `vagrant` we must generate an authentication token. Log in to DigitalOcean in your browser, then navigate to `API` in the menu on the right, then click on `Generate New Token`. You must give it a name, for example the name of the machine where you use the token.
+To create virtual machines at DigitalOcean with `vagrant` we must generate an authentication token. If you did so already during the last exercise session, you can skip this section. Otherwise, log into DigitalOcean in your browser, then navigate to `API` in the menu on the right, then click on `Generate New Token`. You must give it a name, for example the name of the machine where you use the token.
 
 ![](images/do_token.png)
 
-The `Vagrantfile` expects to find your token from your shell environment, so you can for example add it to your `~/.bashrc` or `~/.zshrc`. The variable must be called: called `DIGITAL_OCEAN_TOKEN`, the syntax for defining such an environment variable in your shell configuration file is:
+The `Vagrantfile` expects to find your DigitalOcean token in a respective environment variable in your shell environment. For example, you can  add it to your `~/.bashrc` or `~/.zshrc`. The variable must be called: called `DIGITAL_OCEAN_TOKEN`, the syntax for defining such an environment variable in your shell configuration file is:
 
 ```bash
 export DIGITAL_OCEAN_TOKEN=<your-token>
 ```
 
-After adding the token you must reload your shell, i.e., either close your current terminal and open a new one or use the `source` command on the shell config file you changed, e.g. `source ~/.bashrc`.
+After adding the token you must reload your shell. Either close your current terminal and open a new one or use the `source` command on the shell config file you changed, e.g., `source ~/.bashrc`.
 
 
 ## Starting the Remote Server
-
-First, change directory back to the root of the Git repository with `cd ..`.
 
 Now, you should be able to create the remote VM via `vagrant up`. You can use the below command to ensure that vagrant will use the DigitalOcean provider:
 
@@ -117,7 +124,7 @@ Note down the IP of this server as we will need it in a later step. It should be
 
 ### `/remote_files`
 
-All files contained in the directory `remote_files` will be synced to the newly provisioned server. Currently, this is only a single `docker-compose.yml` file which later will be used to deploy our ITU-MiniTwit application automatically.
+All files contained in the directory `remote_files` will be synced to the newly provisioned server. Currently, this is only a single `docker-compose.yml` file, which later will be used to deploy our ITU-MiniTwit application automatically.
 
 
 <!--
@@ -162,7 +169,7 @@ You should now be redirected to an empty dashboard.
 
 ### Authorize Travis CI
 
-Now, we will setup Travis CI to run a CI/CD pipeline whenever we push commits to our repository. Start by clicking on your profile picture in the upper right corner (make sure to click the image and not the dropdown arrow!).
+Now, we will setup Travis CI to run a CI/CD pipeline whenever we push commits to our repository. Start by clicking on your profile picture in the upper right corner (make sure to click the image and not the dropdown arrow!) and click `Settings`.
 
 ![](images/click_profile.png)
 
@@ -181,63 +188,44 @@ Now, you should see a list of your repositories. Use the search bar to filter to
 
 #### SSH Key Configuration
 
-For this scenario we will have to modify some settings:
+For this scenario, we have to share the SSH key in an appropriate format so that Travis CI can clone this repository to build it. We need the `travis` CLI tool to add the SSH key to build from a public repository.
 
-We have to add our SSH key such that Travis CI can clone our repository. Since the migration to new Travis hosting, SSH keys are only available for private repository jobs, which is why we will need to use the `travis CLI` tool.
-
-First, install the travis CLI gem. Make sure you have at least Ruby 2.3.0 (2.6.0 recommended) installed. You can check your Ruby version by running ruby -v:
-
-```
-$ ruby -v
-ruby 2.3.0p0 (2015-12-25 revision 53290) [x86_64-linux]
-```
-
-Then run:
-
-On OSX and Linux:
-
-`$ gem install travis --no-document`
-
-
-On Windows:
-
-`$ gem install travis`
-
-(source: https://github.com/travis-ci/travis.rb#installation)
-
-Now, we need to log in to our travis account. The easiest way to do that (which also avoids typing your password into the console) it to generate a GitHub Personal Access Token. Head over to `https://github.com/settings/tokens` and generate one:
-
-![](images/github_tokens.png)
-
-Having done that, you can finally log in (remember about the `--com` option, since Travis has two hosting domains now):
+Log into your Travis CI account from the terminal with the `travis` CLI tool (for reproducing this scenario, remember the `--com` option, since Travis has two hosting domains). 
 
 `travis login --com --github-token <YOUR-TOKEN>`
 
-Once you've been authorized, encrypt your SSH key (remember the `-r` option, so Travis knows which repository you are reffering to):
+Once you've been authorized (message like `Successfully logged in as <your_gh_username>!`), encrypt your SSH key (remember the `-r` option, so Travis knows which repository you are reffering to):
 
-`travis encrypt-file <YOUR_PRIVATE_KEY> --com -r <YOUR-USER>/<YOUR_REPO>`
+`travis encrypt-file ssh_keys/do_ssh_key --com -r <YOUR-USER>/itu-minitwit-ci`
 
-Afterwards, add the following to your `travis.yml` file. Substitute the first line (`openssl aes-256-cbc ...`) with the output out the `encrypt-file` command. Then place the generated `YOUR_KEY.enc` file in your repository and substitute `PATH_TO_ENCRYPTED_KEY_IN_REPO` to be a relative path to the key in your repository.
+The above command creates an outpu similar to the following:
 
 ```
-before_install:
-  # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key
-  - openssl aes-256-cbc -K $encrypted_KKKKKKKKKKKK_key -iv $encrypted_VVVVVVVVVVVV_iv -in <PATH_TO_ENCRYPTED_KEY_IN_REPO> -out /tmp/git_deploy_key -d
-  # Make sure only the current user can read the private key
-  - chmod 600 /tmp/git_deploy_key
-  # Create a script to return the passphrase environment variable to ssh-add
-  - echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
-  # Start the authentication agent
-  - eval "$(ssh-agent -s)"
-  # Add the key to the authentication agent
-  - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
+encrypting ssh_keys/do_ssh_key for <your_user>/itu-minitwit-ci
+storing result as do_ssh_key.enc
+storing secure env variables for decryption
+
+Please add the following to your build script (before_install stage in your .travis.yml, for instance):
+
+    openssl aes-256-cbc -K $encrypted_<key_value>_key -iv $encrypted_<iv_value>_iv -in do_ssh_key.enc -out ssh_keys/do_ssh_key -d
+
+Pro Tip: You can add it automatically by running with --add.
+
+Make sure to add do_ssh_key.enc to the git repository.
+Make sure not to add ssh_keys/do_ssh_key to the git repository.
+Commit all changes to your .travis.yml.
 ```
 
-Having done that **commit and push** the updated `travis.yml` and your encrypted `KEY.enc` to your fork of the repository. 
+Afterwards, take the values from `<key_value>` and from `<iv_value>` from the above output and store them in the `.travis.yml` file (both marked with `<REPLACE_ME>` in the `.travis.yml` file that you pulled).
+
+Now, add `do_ssh_key.enc` to version control (`git add ssh_keys/do_ssh_key.enc`, `git commit ...`, `git push`, ...).
+Do the same with the modified `.travis.yml` file.
+
+Remember to **commit and push** the two updated files to your fork of the repository. 
 
 #### Environment Variables
 
-Next, we have to add some environment variables, scroll to `Environment Variables`.
+Next, we have to add some environment variables, scroll to `Environment Variables`, which you can reach under the Settings of the build job for this repository.
 
 For this scenario you must set the following environment variables:
 
@@ -266,6 +254,18 @@ python:
 
 services:
   - docker  # required, but travis uses older version of docker :(
+
+before_install:
+  # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key
+  - openssl aes-256-cbc -K $encrypted_<REPLACE_ME>_key -iv $encrypted_<REPLACE_ME>_iv -in do_ssh_key.enc -out /tmp/git_deploy_key -d
+  # Make sure only the current user can read the private key
+  - chmod 600 /tmp/git_deploy_key
+  # Create a script to return the passphrase environment variable to ssh-add
+  - echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+  # Start the authentication agent
+  - eval "$(ssh-agent -s)"
+  # Add the key to the authentication agent
+  - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
 
 install:
   - docker --version  # document the version travis is using
@@ -308,7 +308,8 @@ jobs:
         "source /root/.bash_profile && \
         cd /vagrant && \
         docker-compose pull && \
-        docker-compose up -d"
+        docker-compose up -d && \
+        docker pull $DOCKER_USERNAME/flagtoolimage:latest"
 
 ```
 
@@ -325,7 +326,7 @@ Note, that each stage is executed in a freshly provisioned VM, so no state carri
 
 ## Trigger Pipeline
 
-Now we are ready to trigger the pipeline. If all of the above went well, a new version of ITU-MiniTwit should be build, tested, delivered, and deployed on every new commit to the repository.
+Now we are ready to trigger the pipeline. If all of the above went well, a new version of _ITU-MiniTwit_ should be build, tested, delivered, and deployed on every new commit to the repository.
 
 ![](images/triggered_pipeline.png)
 
