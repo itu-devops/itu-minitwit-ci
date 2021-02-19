@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
       provider.token = ENV["DIGITAL_OCEAN_TOKEN"]
       provider.image = 'docker-18-04'
       provider.region = 'fra1'
-      provider.size = '1gb'
+      provider.size = 's-1vcpu-1gb'
       provider.privatenetworking = true
     end
 
