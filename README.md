@@ -215,7 +215,7 @@ Having done that, you can finally log in (remember about the `--com` option, sin
 
 Once you've been authorized, encrypt your SSH key (remember the `-r` option, so Travis knows which repository you are reffering to):
 
-`travis encrypt-file id_rsa --com -r <YOUR-USER>/<YOUR_REPO>`
+`travis encrypt-file <YOUR_PRIVATE_KEY> --com -r <YOUR-USER>/<YOUR_REPO>`
 
 Afterwards, add the following to your `travis.yml` file. Substitute the first line (`openssl aes-256-cbc ...`) with the output out the `encrypt-file` command. Then place the generated `YOUR_KEY.enc` file in your repository and substitute `PATH_TO_ENCRYPTED_KEY_IN_REPO` to be a relative path to the key in your repository.
 
