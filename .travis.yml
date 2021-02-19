@@ -8,8 +8,20 @@ python:
 services:
   - docker  # required, but travis uses older version of docker :(
 
+before_install:
+  # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key
+  - openssl aes-256-cbc -K $encrypted_f217180e22ee_key -iv $encrypted_f217180e22ee_iv -in id_rsa.enc -out id_rsa -d
+  # Make sure only the current user can read the private key
+  - chmod 600 /tmp/git_deploy_key
+  # Create a script to return the passphrase environment variable to ssh-add
+  - echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+  # Start the authentication agent
+  - eval "$(ssh-agent -s)"
+  # Add the key to the authentication agent
+  - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
+
 install:
-  - docker --version  # document the version travis is using
+  - docker --version  # document the version travis is ssing
 
 stages:
   - docker_build
