@@ -183,14 +183,57 @@ Now, you should see a list of your repositories. Use the search bar to filter to
 
 For this scenario we will have to modify some settings:
 
-First, we have to add our SSH key such that Travis CI can clone our repository. Go to the pipeline settings tab:
+We have to add our SSH key such that Travis CI can clone our repository. Since the migration to new Travis hosting, SSH keys are only available for private repository jobs, which is why we will need to use the `travis CLI` tool.
 
-![](images/pipeline_settings.png)
+First, install the travis CLI gem. Make sure you have at least Ruby 2.3.0 (2.6.0 recommended) installed. You can check your Ruby version by running ruby -v:
 
-Scroll down to `SSH Key`. Then give the new key a name, i.e., `github + digital_ocean` and in SSH key field paste in the **private** key we generated earlier, e.g., the contents of `ssh_keys/do_ssh_key`, and finish by clicking `Add`.
+```
+$ ruby -v
+ruby 2.3.0p0 (2015-12-25 revision 53290) [x86_64-linux]
+```
 
-![](images/add_ssh_key.png)
+Then run:
 
+On OSX and Linux:
+
+`$ gem install travis --no-document`
+
+
+On Windows:
+
+`$ gem install travis`
+
+(source: https://github.com/travis-ci/travis.rb#installation)
+
+Now, we need to log in to our travis account. The easiest way to do that (which also avoids typing your password into the console) it to generate a GitHub Personal Access Token. Head over to `https://github.com/settings/tokens` and generate one:
+
+![](images/github_tokens.png)
+
+Having done that, you can finally log in (remember about the `--com` option, since Travis has two hosting domains now):
+
+`travis login --com --github-token <YOUR-TOKEN>`
+
+Once you've been authorized, encrypt your SSH key (remember the `-r` option, so Travis knows which repository you are reffering to):
+
+`travis encrypt-file id_rsa --com -r <YOUR-USER>/<YOUR_REPO>`
+
+Afterwards, add the following to your `travis.yml` file. Substitute the first line (`openssl aes-256-cbc ...`) with the output out the `encrypt-file` command. Then place the generated `YOUR_KEY.enc` file in your repository and substitute `PATH_TO_ENCRYPTED_KEY_IN_REPO` to be a relative path to the key in your repository.
+
+```
+before_install:
+  # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key
+  - openssl aes-256-cbc -K $encrypted_KKKKKKKKKKKK_key -iv $encrypted_VVVVVVVVVVVV_iv -in <PATH_TO_ENCRYPTED_KEY_IN_REPO> -out /tmp/git_deploy_key -d
+  # Make sure only the current user can read the private key
+  - chmod 600 /tmp/git_deploy_key
+  # Create a script to return the passphrase environment variable to ssh-add
+  - echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+  # Start the authentication agent
+  - eval "$(ssh-agent -s)"
+  # Add the key to the authentication agent
+  - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
+```
+
+Having done that **commit and push** the updated `travis.yml` and your encrypted `KEY.enc` to your fork of the repository. 
 
 #### Environment Variables
 
