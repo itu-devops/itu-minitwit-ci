@@ -335,7 +335,10 @@ Now we are ready to trigger the pipeline. If all of the above went well, a new v
 
 # Credits
 
-This scenario exists only due to the hard work of [Zander's](https://github.com/zanderhavgaard) and [Christoffer's](https://github.com/ChristofferNissen)!
+This scenario exists only due to the hard work of the TAs:
+  * [Zander](https://github.com/zanderhavgaard)
+  * [Christoffer](https://github.com/ChristofferNissen)
+  * [Michal](https://github.com/tschesky)
 
 ---
 
