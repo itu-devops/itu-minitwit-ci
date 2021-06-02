@@ -15,7 +15,7 @@ py==1.8.1
 pyparsing==2.4.6
 requests==2.22.0
 six==1.14.0
-urllib3==1.25.8
+urllib3==1.26.5
 wcwidth==0.1.8
 Werkzeug==0.16.0
 beautifulsoup4==4.7.1
