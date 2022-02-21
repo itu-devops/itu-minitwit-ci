@@ -196,12 +196,16 @@ Log into your Travis CI account from the terminal with the `travis` CLI tool (fo
 
 Once you've been authorized (message like `Successfully logged in as <your_gh_username>!`), encrypt your SSH key (remember the `-r` option, so Travis knows which repository you are reffering to):
 
-`travis encrypt-file ssh_keys/do_ssh_key --com -r <YOUR-USER>/itu-minitwit-ci`
+`travis encrypt-file ssh_keys/do_ssh_key --com -r <your_gh_username>/itu-minitwit-ci`
 
 The above command creates an outpu similar to the following:
 
+
+openssl aes-256-cbc -K $encrypted_56635d5d55b3_key -iv $encrypted_56635d5d55b3_iv -in do_ssh_key.enc -out ssh_keys/do_ssh_key -d
+
+
 ```
-encrypting ssh_keys/do_ssh_key for <your_user>/itu-minitwit-ci
+encrypting ssh_keys/do_ssh_key for <your_gh_username>/itu-minitwit-ci
 storing result as do_ssh_key.enc
 storing secure env variables for decryption
 
