@@ -41,7 +41,7 @@ docker push <your_dockerhub_username>/minitwitimage
 ### `Dockerfile-flagtool`
 
 `Dockerfile-flagtool` - on Docker Hub: ` <your_dockerhub_username>/flagtoolimage`
-contains the `flagtool adapted to work with MySQL
+contains the `flagtool` adapted to work with MySQL
 
 build with
 ```bash

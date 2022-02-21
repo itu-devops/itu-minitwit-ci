@@ -15,7 +15,7 @@
   * Clone your fork of the repository:
 
   ```bash
-  $ git clone https://github.com/<you_gh_user>/itu-minitwit-ci.git
+  $ git clone https://github.com/<your_gh_user>/itu-minitwit-ci.git
   $ cd itu-minitwit-ci
   ```
 
@@ -78,7 +78,7 @@ Add the generated SSH key to your Github repository, so that Travis CI can clone
 
 ![](images/add_ssh_key_github.png)
 
-Now click `Deploy keys` and then `Add deploy key`. Set the title to something like "Travis CI pipeline" so that you know who has access through this key. Then paste the contents of the **public** key of the SSH keys we generated earlier (`cat ssh_keys/do_ssh_keys.pub`).
+Now click `Deploy keys` and then `Add deploy key`. Set the title to something like "Travis CI pipeline" so that you know who has access through this key. Then paste the contents of the **public** key of the SSH keys we generated earlier (`cat ssh_keys/do_ssh_key.pub`).
 
 ![](images/add_deploy_key.png)
 
@@ -157,7 +157,7 @@ Now, we will setup the Travis CI pipeline.
 
 ### Sign up for Travis CI
 
-Start by signing up for Travis CI. Navigate with your browser to `https://travis-ci.com` and select `Sign up with Github`.
+Start by signing up for Travis CI. Navigate with your browser to [`https://travis-ci.com`](https://travis-ci.com) and select `Sign up with Github`.
 
 ![](images/travis_signup.png)
 
