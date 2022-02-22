@@ -1,7 +1,7 @@
 # ITU-MiniTwit CI/CD Scenario
 
 ## 1.) Requirements
-it works?
+it works 2?
 
   * In case you are not already, register at Docker Hub (https://hub.docker.com/) 
     - To make a later step more straight forward, use a password without any special characters.
