@@ -1,5 +1,8 @@
 # ITU-MiniTwit CI/CD Scenario
 
+> **Warning**
+> This Travis CI guide is no longer maintained. Please use the [ITU-MiniTwit CI/CD Scenario](https://github.com/itu-devops/itu-minitwit-ci) instead.
+
 ## 1.) Requirements
 
 
