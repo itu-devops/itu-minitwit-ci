@@ -23,7 +23,6 @@ Vagrant.configure("2") do |config|
 
     server.vm.provision "shell", inline: 'echo "export DOCKER_USERNAME=' + "'" + ENV["DOCKER_USERNAME"] + "'" + '" >> ~/.bash_profile'
     server.vm.provision "shell", inline: 'echo "export DOCKER_PASSWORD=' + "'" + ENV["DOCKER_PASSWORD"] + "'" + '" >> ~/.bash_profile'
-    server.vm.provision "shell", inline: 'echo "export GH_REPO=' + "'" + ENV["GH_REPO"] + "'" + '" >> ~/.bash_profile'
     
     server.vm.provision "shell", inline: <<-SHELL
     

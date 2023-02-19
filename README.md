@@ -12,7 +12,7 @@
       ![](images/docker_at.png)
       - Copy the generated token and use it as your `DOCKER_PASSWORD` in the next steps.
       ![](images/docker_at2.png)
-  * Login at Docker Hub and create three public repositories with the following names (by clicking the big blue `Create Repository` button in the top right).
+  * Login at Docker Hub and create three public repositories with the following names (by clicking the blue button `Create Repository`  in the top right).
     - `mysqlimage`
     - `minitwitimage`
     - `flagtoolimage`
@@ -31,7 +31,6 @@
   ```bash
   export DOCKER_USERNAME=<your_docker_hub_username>
   export DOCKER_PASSWORD=<your_docker_hub_password>
-  export GH_REPO=https://github.com/<your_github_user>/<your_repo_name>.git
   export DIGITAL_OCEAN_TOKEN=<your_digital_ocean_token>
   ```
 
@@ -45,7 +44,7 @@
 
 To setup this scenario we have two parts:
 - A remote server to which we will deploy our ITU-MiniTwit application and which is provisioned on DigitalOcean using `vagrant`.
-- A Travis CI workflow, which we will use to automate tests, build the application (in Docker images) and deploy them to the server.
+- A GitHub Actions workflow, which we will use to automate tests, build the application (in Docker images) and deploy them to the server.
 
 
 ![](images/CICD_Setup.png)
@@ -106,7 +105,6 @@ Now, you should be able to create the remote VM via `vagrant up`. You can use th
 ```bash
 export DOCKER_USERNAME=<your_docker_hub_username>
 export DOCKER_PASSWORD=<your_docker_hub_password>
-export GH_REPO=https://github.com/<your_github_user>/<your_repo_name>.git
 export DIGITAL_OCEAN_TOKEN=<your_digital_ocean_token>
 
 vagrant up --provider=digital_ocean
