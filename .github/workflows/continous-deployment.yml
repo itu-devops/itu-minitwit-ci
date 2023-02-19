@@ -84,13 +84,11 @@ jobs:
       - name: Copy docker-compose.yml to server
         run: scp docker-compose.yml minitwit:/minitwit/docker-compose.yml
       
-      - name: Copy docker-compose.yml to server
-        run: scp Makefile minitwit:/minitwit/Makefile
+      - name: Copy deploy.sh to server
+        run: >-
+          chmod +x remote_files/deploy.sh &&
+          scp remote_files/deploy.sh minitwit:/minitwit/deploy.sh
 
       - name: Deploy to server
-        run: ssh minitwit 'source ~/.bash_profile && \
-          cd /minitwit && \
-          docker-compose -f docker-compose.yml pull && \
-                docker-compose -f docker-compose.yml up -d && \
-                docker pull $DOCKER_USERNAME/flagtoolimage:latest'
-
+        # Configure the ~./bash_profile file on the Vagrantfile
+        run: ssh minitwit '/minitwit/deploy.sh'
