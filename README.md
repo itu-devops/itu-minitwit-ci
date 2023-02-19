@@ -2,20 +2,6 @@
 
 ## 1.) Requirements
 
-
-  * In case you are not already, register at Docker Hub (https://hub.docker.com/) 
-    - To make a later step more straight forward, use a password without any special characters.
-    - From now on we refer to your login ID from Docker Hub as `DOCKER_USERNAME` and your password there is called `DOCKER_PASSWORD`.
-    - It is recommended to use an access token instead of your password. You can generate one at https://hub.docker.com/settings/security.
-      - Select `New Access Token` and give it a description, e.g., `Access Token for Minitwit CI`.
-      - Under Access permissions, select `Read & Write`
-      ![](images/docker_at.png)
-      - Copy the generated token and use it as your `DOCKER_PASSWORD` in the next steps.
-      ![](images/docker_at2.png)
-  * Login at Docker Hub and create three public repositories with the following names (by clicking the big blue `Create Repository` button in the top right).
-    - `mysqlimage`
-    - `minitwitimage`
-    - `flagtoolimage`
   * You need to be signed up to GitHub Education (https://education.github.com).
   * You need to be signed up at DigitalOcean (https://www.digitalocean.com/).
     - You can use the $100 credit provided by GitHub Education to create a new account.
@@ -49,6 +35,7 @@
   ```bash
   export DOCKER_USERNAME=<your_docker_hub_username>
   export DOCKER_PASSWORD=<your_docker_hub_password>
+  export GH_REPO=https://github.com/<your_github_user>/<your_repo_name>.git
   export DIGITAL_OCEAN_TOKEN=<your_digital_ocean_token>
   ```
 
@@ -123,6 +110,7 @@ Now, you should be able to create the remote VM via `vagrant up`. You can use th
 ```bash
 export DOCKER_USERNAME=<your_docker_hub_username>
 export DOCKER_PASSWORD=<your_docker_hub_password>
+export GH_REPO=https://github.com/<your_github_user>/<your_repo_name>.git
 export DIGITAL_OCEAN_TOKEN=<your_digital_ocean_token>
 
 vagrant up --provider=digital_ocean
