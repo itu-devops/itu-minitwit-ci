@@ -5,14 +5,14 @@
   * You need to be signed up to GitHub Education (https://education.github.com).
   * You need to be signed up at DigitalOcean (https://www.digitalocean.com/).
     - You can use the $100 credit provided by GitHub Education to create a new account.
-  * Fork this repository (https://github.com/itu-devops/itu-minitwit-ci) by clicking on the fork button on Github
+  * Fork this repository (https://github.com/itu-devops/itu-minitwit-ci) by clicking on the fork button on GitHub
   * Clone your fork of the repository:
 
   ```bash
   $ git clone https://github.com/<your_gh_user>/itu-minitwit-ci.git
   $ cd itu-minitwit-ci
   ```
-  * In case you are not already, register at Docker Hub (https://hub.docker.com/) 
+  * In case you are not already, register at Docker Hub (https://hub.docker.com/)
     - To make a later step more straight forward, use a password without any special characters.
     - From now on we refer to your login ID from Docker Hub as `DOCKER_USERNAME` and your password there is called `DOCKER_PASSWORD`.
     - It is recommended to use an access token for Docker Hub instead of your password. You can generate one at https://hub.docker.com/settings/security.
@@ -26,8 +26,8 @@
     - `minitwitimage`
     - `flagtoolimage`
 
-  * When using the `Vagrantfile`, export your Docker Hub credentials as environment variables. 
-  
+  * When using the `Vagrantfile`, export your Docker Hub credentials as environment variables.
+
   | :warning: WARNING          |
   |:---------------------------|
   | **OBS:** Remember to **not push these credentials back to a public repository**. |
@@ -44,7 +44,7 @@
     - Under `Security`, `Secrets and variables`, click `Actions` and select `New repository secret`
     - Add `DOCKER_USERNAME` and `DOCKER_PASSWORD` to allow the GitHub Action to push to Docker Hub
     ![](images/github_secrets.png)
-    
+
 ----
 
 To setup this scenario we have two parts:
@@ -192,14 +192,14 @@ The scenario should already have a sample [continous-deployment.yml](.github/wor
 
 
 This workflow is divided into several stages:
-  
+
   - `Checkout`
     - Clone the repository and checkout the latest commit.
   - `Docker`
     - Login to hub.docker.com
     - Setup Docker
     - Build the Docker images for minitwit.
-    
+
     If the test fails the workflow will abort and alert you that the tests are failing.
   - `Deploy`
     - The final step logs into the server and deploys the new version to our remote server by opening an SSH connection and, which remotely sets-up the environment variables (`source /root/.bash_profile`), pulls the freshly built Docker images from hub.docker.com (`docker-compose pull`), and finally updates the running containers to the new version (`docker-compose up -d`).
@@ -223,10 +223,9 @@ VAGRANT_LOG=debug vagrant up --provider=digital_ocean
 # Credits
 
 This scenario exists only due to the hard work of the TAs:
-  * [Zander](https://github.com/zanderhavgaard)
-  * [Christoffer](https://github.com/ChristofferNissen)
-  * [Michal](https://github.com/tschesky)
-  * [Gianmarco](https://github.com/gianmarcomurru)
+  * 2020: [Zander](https://github.com/zanderhavgaard) and [Christoffer](https://github.com/ChristofferNissen)
+  * 2021: [Michal](https://github.com/tschesky)
+  * 2023: [Gianmarco](https://github.com/gianmarcomurru)
 ---
 
 
