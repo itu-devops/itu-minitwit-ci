@@ -120,13 +120,9 @@ Note down the IP of this server as we will need it in a later step. It should be
 
 ### `/remote_files`
 
-All files contained in the directory `remote_files` will be synced to the newly provisioned server. Currently, this is only a single `docker-compose.yml` file, which later will be used to deploy our ITU-MiniTwit application automatically.
+All files contained in the directory `remote_files` will be synced to the newly provisioned server. Currently, this is only a `deploy.sh` shell script and a `docker-compose.yml` file.
+These will be used by your CI/CD chain later to deploy our ITU-MiniTwit application automatically.
 
-<!--
-When the server has finished initalizing, it use docker-compose file to start minitwtit with the command `docker-compose up -d`. The `up` command actually does a lot of things: first it will check if the images specified in the docker-compose.yml are present, if they are not it will attempt to pull them from `hub.docker.com` or any other private registries it might be signed into. Next the `up` command will check if there are any running conatiners of the images, and if there are none, it will create them, if they are present, but an older version, the images that have a newer version available will be recreated with newer version. If all containers are up to date, then nothing will happen. The `-d` will start the docker containers as `daemons` in the background.
-
-Whenever the `mysql` container is restarted it needs ~20 seconds to initialize, so don't panic if the url shows a mysql error, just wait a moment and reload the page.
--->
 
 ### SSH to server
 
