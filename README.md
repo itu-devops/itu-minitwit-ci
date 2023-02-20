@@ -132,6 +132,7 @@ If you need to SSH to remote server you can easily do it through `vagrant` with 
 $ vagrant ssh
 ```
 
+<!--
 Create `~/.ssh/config` if it does not exist and add the following lines:
 
 ```
@@ -143,6 +144,7 @@ Host minitwit
 ```
 
 Verify that you can connect to the server via SSH `ssh minitwit`.
+-->
 
 You can also do it 'manually' like so:
 
