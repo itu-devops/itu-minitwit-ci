@@ -170,7 +170,7 @@ As before, navigate to the repository settings on GitHub. Under `Security`, `Sec
 For this scenario you must set the following environment variables:
 
 - `DOCKER_USERNAME` username for hub.docker.com
-- `DOCKER_PASSWORD` password for username for hub.docker.com
+- `DOCKER_PASSWORD` access token for username for hub.docker.com
 - `SSH_USER` the user as whom we will connect to the server at DigitalOcean, default is `root`
 - `SSH_KEY` the **private** SSH key we generated earlier (not the public key, if you followed the instructions it should be located at `~/.ssh/do_ssh_key`)
 - `SSH_HOST` the IP address of the server (or DNS name) we created on DigitalOcean, which you noted down earlier.
