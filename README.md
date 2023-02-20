@@ -35,7 +35,6 @@
   ```bash
   export DOCKER_USERNAME=<your_docker_hub_username>
   export DOCKER_PASSWORD=<your_docker_hub_password>
-  export GH_REPO=https://github.com/<your_github_user>/<your_repo_name>.git
   export DIGITAL_OCEAN_TOKEN=<your_digital_ocean_token>
   ```
 
@@ -110,7 +109,6 @@ Now, you should be able to create the remote VM via `vagrant up`. You can use th
 ```bash
 export DOCKER_USERNAME=<your_docker_hub_username>
 export DOCKER_PASSWORD=<your_docker_hub_password>
-export GH_REPO=https://github.com/<your_github_user>/<your_repo_name>.git
 export DIGITAL_OCEAN_TOKEN=<your_digital_ocean_token>
 
 vagrant up --provider=digital_ocean
