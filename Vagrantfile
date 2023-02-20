@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "minitwit", primary: true do |server|
 
     server.vm.provider :digital_ocean do |provider|
-      provider.ssh_key_name = "digital_ocean_ssh_key"
+      provider.ssh_key_name = "do_ssh_key"
       provider.token = ENV["DIGITAL_OCEAN_TOKEN"]
       provider.image = 'ubuntu-20-04-x64'
       provider.region = 'fra1'
