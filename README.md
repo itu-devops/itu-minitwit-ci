@@ -39,7 +39,7 @@
   ```
 
   * Setup GitHub Action Secrets
-    - Navigate to the repository settings on GitHub
+    - Navigate to the repository settings on GitHub (`Settings` tab to the top right, with cog wheel)
     - Under `Security`, `Secrets and variables`, click `Actions` and select `New repository secret`
     - Add `DOCKER_USERNAME` and `DOCKER_PASSWORD` to allow the GitHub Action to push to Docker Hub
     ![](images/github_secrets.png)
@@ -64,9 +64,8 @@ To connect to the server we are going to provision, we will use RSA keys for aut
 Now, create a keypair as illustrated below.
 
 ```bash
-  ssh-keygen -f ~/.ssh/do_ssh_key -t rsa -b 4096 -m "PEM"
+ssh-keygen -f ~/.ssh/do_ssh_key -t rsa -b 4096 -m "PEM"
 ```
-
 
 Hit enter two times to accept the other defaults. You can call the SSH key files whatever you want, but the `Vagrantfile` expects the SSH keys to have that specific name. So in case you use another name, adapt the `Vagrantfile` accordingly.
 
@@ -74,7 +73,7 @@ Hit enter two times to accept the other defaults. You can call the SSH key files
 
 ## 2.1.) Register your Public SSH at DigitalOcean
 
-Now, after generating the key pair, log into DigitalOcean and navigate to the security configuration, left bottom under `ACCOUNT` -> `Security`.
+Now, after generating the key pair, log into DigitalOcean and navigate to the security configuration, left under `Settings` -> `Security` (second tab).
 
 Under `SSH keys` click the `Add SSH Key` button and register a `New SSH key` with the name `do_ssh_key`. Paste into the input field the contents of `~/.ssh/do_ssh_key.pub`, which you might receive via: `cat ~/.ssh/do_ssh_key.pub` on the command line.
 
