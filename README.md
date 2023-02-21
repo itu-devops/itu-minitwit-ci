@@ -205,6 +205,8 @@ Note, that each stage is executed in a freshly provisioned VM on GitHub Actions,
 
 Now we are ready to trigger the workflow. If all of the above went well, a new version of _ITU-MiniTwit_ should be build, tested, delivered, and deployed on every new commit to the repository.
 
+To trigger the workflow, we can either push a new commit to the repository, or we can manually trigger the workflow from the GitHub Actions tab. Click on the `Actions` tab and select the `continous-deployment` workflow. Click on the `Run workflow` button and select the branch you want to deploy.
+
 ![](images/triggered_workflow.png)
 
 ---
