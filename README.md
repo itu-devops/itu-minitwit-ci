@@ -219,7 +219,7 @@ Click on the `Actions` tab and select the `continous-deployment` workflow. Click
 
 ## Final Steps
 
-Now, we configured and setup an automatic CI/CD chain (the GitHub Actions workflow), that builds, tests, delivers out _ITU-MinitTwit_ to Docker Hub, and that deploys it to our remote server on any commit to the repositories main branch or on manual execution (clicking the run workflow button on GitHub).
+Now, we configured and setup an automatic CI/CD chain (the GitHub Actions workflow), that builds, tests, delivers our _ITU-MinitTwit_ to Docker Hub, and that deploys it to our remote server on any commit to the repositories main branch or on manual execution (clicking the run workflow button on GitHub).
 
 ![](images/CICD_Setup.png)
 
@@ -254,4 +254,6 @@ This scenario exists only due to the hard work of the TAs:
 
 # References
 
+  * Read [the official documentation](https://docs.github.com/en/actions), to see what can be expressed in GitHub Action workflows.
+  * Once you read the above, you might want to consider a list [of best practices](https://exercism.org/docs/building/github/gha-best-practices).
   * For some more details on the Docker images see the file `readme_dockerized.md`
