@@ -69,7 +69,7 @@ jobs:
       - name: Test minitwit
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/minitwittestimage -f Dockerfile-minitwit-tests .
-          yes | docker-compose up -d
+          yes 2>/dev/null | docker-compose up -d
           docker run -it --rm --network=itu-minitwit-network ${{ secrets.DOCKER_USERNAME }}/minitwittestimage
         
       - name: Configure SSH
