@@ -66,32 +66,36 @@ jobs:
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/flagtoolimage:flagtoolbuildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/flagtoolimage:flagtoolbuildcache,mode=max
 
+      - name: Test minitwit
+        run: |
+          docker build -t $DOCKER_USERNAME/minitwittestimage -f Dockerfile-minitwit-tests .
+          yes 2>/dev/null | docker-compose up -d
+          docker run -it --rm --network=itu-minitwit-network $DOCKER_USERNAME/minitwittestimage
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_KEY" > ~/.ssh/minitwit.key
           chmod 600 ~/.ssh/minitwit.key
-          cat >>~/.ssh/config <<END
-          Host minitwit
-            HostName $SSH_HOST
-            User $SSH_USER
-            IdentityFile ~/.ssh/minitwit.key
-            StrictHostKeyChecking no
-          END
         env:
-          # Configure this in your repository's settings
-          SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Copy docker-compose.yml to server
-        run: scp docker-compose.yml minitwit:/minitwit/docker-compose.yml
-      
-      - name: Copy deploy.sh to server
-        run: >-
-          chmod +x remote_files/deploy.sh &&
-          scp remote_files/deploy.sh minitwit:/minitwit/deploy.sh
+        run: >
+          scp docker-compose.yml
+          $SSH_USER@$SSH_HOST:/minitwit/docker-compose.yml
+          -i ~/.ssh/minitwit.key -o StrictHostKeyChecking=no
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Deploy to server
-        # Configure the ~./bash_profile file on the Vagrantfile
-        run: ssh minitwit '/minitwit/deploy.sh'
+        # Configure the ~./bash_profile and deploy.sh file on the Vagrantfile
+        run: >
+          ssh $SSH_USER@$SSH_HOST '/minitwit/deploy.sh'
+          -i ~/.ssh/minitwit.key -o StrictHostKeyChecking=no
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}

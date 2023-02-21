@@ -238,6 +238,12 @@ If you have error with the `vagrant up` command, you can try to run it with the 
 VAGRANT_LOG=debug vagrant up --provider=digital_ocean
 ```
 
+# Documentation
+
+- [Vagrant](https://www.vagrantup.com/docs)
+- [GitHub Actions](https://docs.github.com/en/actions)
+- [GitHub Actions: Best Practices](https://exercism.org/docs/building/github/gha-best-practices)
+
 # Credits
 
 This scenario exists only due to the hard work of the TAs:
