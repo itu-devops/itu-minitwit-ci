@@ -82,20 +82,11 @@ jobs:
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
 
-      - name: Copy docker-compose.yml to server
-        run: >
-          scp docker-compose.yml
-          $SSH_USER@$SSH_HOST:/minitwit/docker-compose.yml
-          -i ~/.ssh/minitwit.key -o StrictHostKeyChecking=no
-        env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-
       - name: Deploy to server
         # Configure the ~./bash_profile and deploy.sh file on the Vagrantfile
         run: >
-          ssh $SSH_USER@$SSH_HOST '/minitwit/deploy.sh'
-          -i ~/.ssh/minitwit.key -o StrictHostKeyChecking=no
+          ssh -i ~/.ssh/minitwit.key -o StrictHostKeyChecking=no
+          $SSH_USER@$SSH_HOST '/minitwit/deploy.sh'
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
