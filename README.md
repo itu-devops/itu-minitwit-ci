@@ -56,7 +56,7 @@ ssh-keygen -f ~/.ssh/do_ssh_key -t rsa -b 4096 -m "PEM"
 
 Hit enter two times to accept the proposed defaults.
 You can call the SSH key files whatever you want, but the `Vagrantfile` expects the SSH keys to have that specific name.
-So in case you use another name, adapt the `Vagrantfile` accordingly (line `provider.ssh_key_name = "do_ssh_key"`).
+So in case you use another name, adapt the `Vagrantfile` accordingly (line `provider.ssh_key_name = "do_ssh_key"`). Additionally for Step 4, you must change it all 3 times it is being defined in in `.github/workflows/continous-deployment.yml`
 
 
 ### Step 1.b) Register your Public SSH at DigitalOcean
