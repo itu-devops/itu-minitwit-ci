@@ -56,13 +56,18 @@ ssh-keygen -f ~/.ssh/do_ssh_key -t rsa -b 4096 -m "PEM"
 
 Hit enter two times to accept the proposed defaults.
 You can call the SSH key files whatever you want, but the `Vagrantfile` expects the SSH keys to have that specific name.
-So in case you use another name, adapt the `Vagrantfile` accordingly (line `provider.ssh_key_name = "do_ssh_key"`). Additionally for Step 4, you must change it all 3 times it is being defined in in `.github/workflows/continous-deployment.yml`
+So in case you use another name:
+  - adapt the `Vagrantfile` accordingly (line `provider.ssh_key_name = "do_ssh_key"`)
+  - for [Step 4](#step-4---creating-and-configuring-a-workflow-on-github-actions), you must change it the three times it is defined in `.github/workflows/continous-deployment.yml`
+  - that is, best go for the given name `do_ssh_key`
 
 
 ### Step 1.b) Register your Public SSH at DigitalOcean
 
 Now, after generating the key pair, log into DigitalOcean and navigate to the security configuration, left under `Settings` -> `Security` (second tab).
-Under `SSH keys` click the `Add SSH Key` button and register a `New SSH key` with the name `do_ssh_key`. Paste into the input field the contents of `~/.ssh/do_ssh_key.pub`, which you might receive via: `cat ~/.ssh/do_ssh_key.pub` on the command line.
+Under `SSH keys` click the `Add SSH Key` button and register a `New SSH key` with the name `do_ssh_key`.
+Paste the contents of `~/.ssh/do_ssh_key.pub` into the input field.
+You can receive these via: `cat ~/.ssh/do_ssh_key.pub` on the command line.
 
 
 ### Step 1.c) Creating a Remote Server
@@ -73,7 +78,7 @@ We assume that you have `vagrant` and the Vagrant DigitalOcean plugin installed,
 
 #### DigitalOcean Token
 
-To create virtual machines at DigitalOcean with `vagrant` we must generate an authentication token.
+To create virtual machines at DigitalOcean with `vagrant` you must generate an authentication token.
 If you did so already during the last exercise session, you can skip this section.
 Otherwise, log into DigitalOcean in your browser, then navigate to `API` in the menu on the right, then click on `Generate New Token`.
 You must give it a name, for example the name of the machine where you use the token.
@@ -88,13 +93,14 @@ The variable must be called: called `DIGITAL_OCEAN_TOKEN`, the syntax for defini
 export DIGITAL_OCEAN_TOKEN=<your-token>
 ```
 
-After adding the token you must reload your shell.
+After adding the token, you must reload your shell.
 Either close your current terminal and open a new one or use the `source` command on the shell config file you changed, e.g., `source ~/.bashrc`.
 
 
 #### Starting the Remote Server
 
-Now, you should be able to create the remote VM via `vagrant up`. You can use the below command to ensure that vagrant will use the DigitalOcean provider:
+Now, you should be able to create the remote VM via `vagrant up`.
+You can use the below command to ensure that vagrant will use the DigitalOcean provider:
 
 ```bash
 export DOCKER_USERNAME=<your_docker_hub_username>
@@ -106,7 +112,8 @@ vagrant up --provider=digital_ocean
 
 ![](images/vagrant_up.png)
 
-Note down the IP of this server as we will need it in a later step. It should be displayed after the server was created.
+Note down the IP of this server as we will need it in a later step.
+It should be displayed after the server was created.
 
 
 #### SSH to server
@@ -136,9 +143,9 @@ Later, these will be used by your CI/CD chain to deploy our ITU-MiniTwit applica
 
 <img src="images/CICD_Setup_2.png" width="100%">
 
-In case you are not already, register at Docker Hub (https://hub.docker.com/).
+Register at [Docker Hub](https://hub.docker.com/) in case you are not already registered there.
   - To make a later step more straight forward, use a password without any special characters.
-  - From now on we refer to your login ID from Docker Hub as `DOCKER_USERNAME` and your password there is called `DOCKER_PASSWORD`.
+  - From now on, we refer to your login ID from Docker Hub as `DOCKER_USERNAME` and your password there is called `DOCKER_PASSWORD`.
   - It is recommended to use an access token for Docker Hub instead of your password. You can generate one at https://hub.docker.com/settings/security.
     - Select `New Access Token` and give it a description, e.g., `Access Token for Minitwit CI`.
     - Under Access permissions, select `Read & Write`
