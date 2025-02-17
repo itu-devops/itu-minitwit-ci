@@ -69,7 +69,7 @@ jobs:
       - name: Test minitwit
         run: |
           docker build -t $DOCKER_USERNAME/minitwittestimage -f Dockerfile-minitwit-tests .
-          yes 2>/dev/null | docker-compose up -d
+          yes 2>/dev/null | docker compose up -d
           docker run --rm --network=itu-minitwit-network $DOCKER_USERNAME/minitwittestimage
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
