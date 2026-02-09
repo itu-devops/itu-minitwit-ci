@@ -14,7 +14,7 @@ Once complete, the scenario looks as depicted below:
 
 ## Step 0 - Basic Preparations
 
-  * You need to be signed up to GitHub Education (https://education.github.com).
+  * You might want to be signed up to GitHub Education (https://education.github.com) to obtain free credits to services like DigitalOcean.
   * You need to be signed up at DigitalOcean (https://www.digitalocean.com/).
     - You can use the $100 credit provided by GitHub Education to create a new account.
   * **Fork this repository** (https://github.com/itu-devops/itu-minitwit-ci) by clicking on the fork button on GitHub
