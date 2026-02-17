@@ -6,7 +6,7 @@ networks:
 services:
 
   minitwitimage:
-    image: ${DOCKER_USERNAME}/minitwitimage
+    image: ghcr.io/${GITHUB_USERNAME}/minitwitimage
     container_name: minitwit
     networks:
       - main
@@ -16,7 +16,7 @@ services:
         - '5000:5000'
 
   itusqlimage:
-    image: ${DOCKER_USERNAME}/mysqlimage
+    image: ghcr.io/${GITHUB_USERNAME}/mysqlimage
     container_name: minitwit_mysql
     networks:
       - main
