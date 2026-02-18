@@ -146,8 +146,9 @@ Later, these will be used by your CI/CD chain to deploy our ITU-MiniTwit applica
 Register at [Docker Hub](https://hub.docker.com/) in case you are not already registered there.
   - To make a later step more straight forward, use a password without any special characters.
   - From now on, we refer to your login ID from Docker Hub as `DOCKER_USERNAME` and your password there is called `DOCKER_PASSWORD`.
-  - It is recommended to use an access token for Docker Hub instead of your password. You can generate one at https://hub.docker.com/settings/security.
-    - Select `New Access Token` and give it a description, e.g., `Access Token for Minitwit CI`.
+  - It is recommended to use an access token for Docker Hub instead of your password.
+    - You can generate one at https://app.docker.com/accounts/<your_dockerhub_username>/settings/personal-access-tokens (replace `<your_dockerhub_username>` accordingly) or log into DockerHub and navigate to the `Personal access token` configuration, left under `Settings`.
+    - Click `Generate new tken` and give it a description, e.g., `Access Token for Minitwit CI`.
     - Under Access permissions, select `Read & Write`
     ![](images/docker_at.png)
     - Copy the generated token and use it as your `DOCKER_PASSWORD` in the steps that are described below.
